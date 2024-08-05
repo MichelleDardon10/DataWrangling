@@ -1,0 +1,119 @@
+---
+title: "Laboratorio1"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(readr)
+library(readxl)
+library(openxlsx)
+library(dplyr)
+library(DT)
+library(shiny)
+library(writexl)  
+```
+
+Column {data-width=800}
+-----------------------------------------------------------------------
+
+### DATOS DE ENERO A NOVIEMBRE 
+
+
+```{r}
+archivos <- c(
+  "C:/Users/miche/OneDrive/Escritorio/DATA_WRANGLING/LABS/01_lab1/Lab1/01-2023.xlsx",
+  "C:/Users/miche/OneDrive/Escritorio/DATA_WRANGLING/LABS/01_lab1/Lab1/02-2023.xlsx",
+  "C:/Users/miche/OneDrive/Escritorio/DATA_WRANGLING/LABS/01_lab1/Lab1/03-2023.xlsx",
+  "C:/Users/miche/OneDrive/Escritorio/DATA_WRANGLING/LABS/01_lab1/Lab1/04-2023.xlsx",
+  "C:/Users/miche/OneDrive/Escritorio/DATA_WRANGLING/LABS/01_lab1/Lab1/05-2023.xlsx",
+  "C:/Users/miche/OneDrive/Escritorio/DATA_WRANGLING/LABS/01_lab1/Lab1/06-2023.xlsx",
+  "C:/Users/miche/OneDrive/Escritorio/DATA_WRANGLING/LABS/01_lab1/Lab1/07-2023.xlsx",
+  "C:/Users/miche/OneDrive/Escritorio/DATA_WRANGLING/LABS/01_lab1/Lab1/08-2023.xlsx",
+  "C:/Users/miche/OneDrive/Escritorio/DATA_WRANGLING/LABS/01_lab1/Lab1/09-2023.xlsx",
+  "C:/Users/miche/OneDrive/Escritorio/DATA_WRANGLING/LABS/01_lab1/Lab1/10-2023.xlsx",
+  "C:/Users/miche/OneDrive/Escritorio/DATA_WRANGLING/LABS/01_lab1/Lab1/11-2023.xlsx"
+)
+
+# Definir las fechas correspondientes a cada archivo
+fechas <- c(
+  "01-2023", "02-2023", "03-2023", "04-2023", "05-2023", 
+  "06-2023", "07-2023", "08-2023", "09-2023", "10-2023", "11-2023"
+)
+
+# Leer los archivos y agregar la columna 'Fecha'
+datos_completos <- mapply(function(archivo, fecha) {
+  data <- read_excel(archivo)
+  data$Fecha <- fecha
+  return(data)
+}, archivo = archivos, fecha = fechas, SIMPLIFY = FALSE) %>%
+  bind_rows()
+
+# Mostrar el data frame unificado completo con DT::datatable
+datatable(datos_completos, options = list(
+  scrollX = TRUE,            
+  scrollY = "100vh",          
+  paging = TRUE,             
+  pageLength = 100,          
+  autoWidth = TRUE           
+), width = '100%')             
+
+
+# Mostrar las primeras filas del data frame unificado
+head(datos_completos)
+
+# Guardar el data frame como archivo Excel en la carpeta de trabajo
+output_file <- "datos_completos.xlsx"
+write_xlsx(datos_completos, output_file)
+# Crear un enlace para descargar el archivo Excel generado
+download_link <- a("Descargar archivo Excel", href = "datos_completos.xlsx", download = "datos_completos.xlsx")
+download_link
+
+```
+
+## Column {data-width=800}
+
+### MEDIA
+
+```{r}
+lista1 <- c(sample(1:100,10))
+lista2 <- c(sample(1:100,10))
+lista3 <- c(sample(1:100,10))
+
+numeros_random <- data.frame(
+  lista1,
+  lista2,
+  lista3
+)
+
+media_por_columna <- lapply(numeros_random, mean)
+
+sprintf("MEDIA 1: %.2f", media_por_columna$lista1)
+sprintf("MEDIA 2: %.2f", media_por_columna$lista2)
+sprintf("MEDIA 3: %.2f", media_por_columna$lista3)
+
+datatable(numeros_random, options = list(
+  scrollX = TRUE,
+  scrollY = "100vh",
+  paging = FALSE,
+  pageLength = 10,
+  autoWidth = TRUE
+), width = '100%')
+
+```
+
+## Column {data-width=800}
+
+### Analisis Vehicular Enero 2019 
+
+```{r}
+analisisvehicular <- read_delim("C:/Users/miche/OneDrive/Escritorio/DATA_WRANGLING/LABS/01_lab1/Lab1/INE_PARQUE_VEHICULAR_080219.txt", delim = "\t") 
+
+head(analisisvehicular)
+```
+
+
