@@ -25,21 +25,22 @@ Indicaciones generales:
 1.  ¿Qué es una ufunc y por qué debemos de utilizarlas cuando
     programamos trabajando datos?
 
-Ufunc es una colección de funcionaes qye significa “Universal Functions”
-de NumPy que operan de forma rápida y eficiente sobre arrays. Estas
-funciones están optimizadas para trabajar sobre estructuras de datos en
-paralelo, aplicando operaciones elemento por elemento.Son útiles
-justamente porque permiten manejar operaciones vectorizadas en arrays,
-eliminando la necesidad de bucles explícitos y, por lo tanto, mejoran
-significativamente el rendimiento de las operaciones, especialmente
-cuando se trabaja con un volumen alto de datos.
+- Ufunc es una colección de funcionaes qye significa “Universal
+  Functions” de NumPy que operan de forma rápida y eficiente sobre
+  arrays. Estas funciones están optimizadas para trabajar sobre
+  estructuras de datos en paralelo, aplicando operaciones elemento por
+  elemento.Son útiles justamente porque permiten manejar operaciones
+  vectorizadas en arrays, eliminando la necesidad de bucles explícitos
+  y, por lo tanto, mejoran significativamente el rendimiento de las
+  operaciones, especialmente cuando se trabaja con un volumen alto de
+  datos.
 
 2.  Es una técnica en programación numérica que amplía los objetos que
     son de menor dimensión para que sean compatibles con los de mayor
     dimensión. Describa cuál es la técnica y de un breve ejemplo en R.
 
-La técnica se llama broadcasting. Un ejemplo en R para ajustar el objeto
-a con el objeto b:
+- La técnica se llama broadcasting. Un ejemplo en R para ajustar el
+  objeto a con el objeto b:
 
 Vector de menor dimensión a \<- c(1, 2, 3)
 
@@ -50,20 +51,22 @@ Broadcasting: R ajusta el vector ‘a’ para ser compatible con la matriz
 
 result \<- a + b
 
-Cuando se hace a + b, el broadcasting expande el vector a para que cada
-fila de la matriz b sume con el vector a. En este caso, el vector a se
-“repite” tres veces para que coincida con las tres filas de la matriz b.
+- Cuando se hace a + b, el broadcasting expande el vector a para que
+  cada fila de la matriz b sume con el vector a. En este caso, el vector
+  a se “repite” tres veces para que coincida con las tres filas de la
+  matriz b.
 
 3.  ¿Qué es el axioma de elegibilidad y por qué es útil al momento de
     hacer análisis de datos?
 
-El axioma de elegibilidad en teoría de conjuntos establece que, dado un
-conjunto y una propiedad, es posible formar subconjuntos que contengan
-solo los elementos que cumplen dicha propiedad. Es útil en análisis de
-datos porque permite filtrar y seleccionar subconjuntos relevantes de un
-conjunto de datos grande. Por ejemplo, cuando seleccionamos solo las
-filas de una base de datos que cumplen con una cierta condición (por
-ejemplo, usuarios hombres o mujeres, filtraciones por edad, etc).
+- El axioma de elegibilidad en teoría de conjuntos establece que, dado
+  un conjunto y una propiedad, es posible formar subconjuntos que
+  contengan solo los elementos que cumplen dicha propiedad. Es útil en
+  análisis de datos porque permite filtrar y seleccionar subconjuntos
+  relevantes de un conjunto de datos grande. Por ejemplo, cuando
+  seleccionamos solo las filas de una base de datos que cumplen con una
+  cierta condición (por ejemplo, usuarios hombres o mujeres,
+  filtraciones por edad, etc).
 
 4.  Cuál es la relación entre la granularidad y la agregación de datos?
     Mencione un breve ejemplo. Luego, explique cuál es la granularidad o
@@ -78,25 +81,25 @@ ejemplo, usuarios hombres o mujeres, filtraciones por edad, etc).
 | FR   | 4,332    |
 | ROW  | 943      |
 
-La granularidad se refiere al nivel de detalle en los datos, donde una
-mayor granularidad implica más detalles (como datos individuales o
-transacciones). Por otro lado, la agregación combina o resume esos datos
-detallados en un nivel más general (como a nivel de país o mes). Por
-ejemplo, en un conjunto de datos de compras, una alta granularidad
-mostraría cada compra individual, mientras que una menor granularidad
-agruparía las compras por usuario o país. Para generar un reporte de
-usuarios por país, se requiere un nivel de agregación que sume los datos
-individuales a nivel de país, reduciendo la granularidad para mostrar
-solo el total de usuarios por cada país.
+- La granularidad se refiere al nivel de detalle en los datos, donde una
+  mayor granularidad implica más detalles (como datos individuales o
+  transacciones). Por otro lado, la agregación combina o resume esos
+  datos detallados en un nivel más general (como a nivel de país o mes).
+  Por ejemplo, en un conjunto de datos de compras, una alta granularidad
+  mostraría cada compra individual, mientras que una menor granularidad
+  agruparía las compras por usuario o país. Para generar un reporte de
+  usuarios por país, se requiere un nivel de agregación que sume los
+  datos individuales a nivel de país, reduciendo la granularidad para
+  mostrar solo el total de usuarios por cada país.
 
-Basándose en la tabla que presenta el número total de usuarios por país,
-se requiere un nivel de agregación que combine los datos individuales de
-cada usuario y los sume por país. Esto implica reducir la granularidad
-de los datos originales (donde cada fila representa a un usuario
-individual) para obtener un resumen donde solo se vea el total de
-usuarios por cada país. De esta manera, se pasa de datos detallados
-(usuarios individuales) a un resumen general (usuarios agrupados por
-país).
+- Basándose en la tabla que presenta el número total de usuarios por
+  país, se requiere un nivel de agregación que combine los datos
+  individuales de cada usuario y los sume por país. Esto implica reducir
+  la granularidad de los datos originales (donde cada fila representa a
+  un usuario individual) para obtener un resumen donde solo se vea el
+  total de usuarios por cada país. De esta manera, se pasa de datos
+  detallados (usuarios individuales) a un resumen general (usuarios
+  agrupados por país).
 
 ## Sección I: Preguntas teóricas. (50pts)
 
@@ -117,10 +120,6 @@ paste0("Mis preguntas a resolver son: ",paste0(preguntas,collapse = ", "))
 
     ## [1] "Mis preguntas a resolver son: 2, 4, 5, 8, 10"
 
-``` r
-#mis preguntas son 2,4,5,8 y 10
-```
-
 ### Listado de preguntas teóricas
 
 ##### Mis preguntas son 2,4,5,8 y 10
@@ -129,27 +128,66 @@ paste0("Mis preguntas a resolver son: ",paste0(preguntas,collapse = ", "))
     funciones que el keyword `OR` para filtrar uno o más elementos una
     misma columna?
 
-3.  ¿Cuál es la diferencia entre utilizar `==` y `=` en R?
+- El keyword que cumple las mismas funciones que OR en SQL es IN. Se
+  utiliza para filtrar uno o más valores dentro de una misma columna de
+  manera más concisa.
 
-4.  ¿Cuál es la forma correcta de cargar un archivo de texto donde el
+- Ejemplo de comparación:
+
+SELECT \* FROM tabla WHERE columna IN (‘valor1’, ‘valor2’, ‘valor3’);
+
+SELECT \* FROM tabla WHERE columna = ‘valor1’ OR columna = ‘valor2’ OR
+columna = ‘valor3’;
+
+4.  ¿Cuál es la diferencia entre utilizar `==` y `=` en R?
+
+En R, == se usa para comparar valores, mientras que = se usa para
+asignar valores en ciertos contextos, como dentro de una función.
+
+5.  ¿Cuál es la forma correcta de cargar un archivo de texto donde el
     delimitador es `:`?
 
-5.  Si en un dataframe, a una variable de tipo `factor` le agrego un
+- Para cargar un archivo de texto en R donde el delimitador es :, puedes
+  utilizar la función read.table() o read.csv() especificando el
+  parámetro sep.El parámetro sep en las funciones como read.table() o
+  read.csv() en R se utiliza para especificar el delimitador que separa
+  los valores en el archivo de texto. Un delimitador es el carácter que
+  se utiliza para separar columnas o campos en un archivo de datos. Al
+  especificar el delimitador con sep, R sabe cómo dividir cada fila del
+  archivo de texto en columnas. Si no se indica correctamente el
+  delimitador, R podría interpretar toda la fila como un solo valor o no
+  dividir las columnas correctamente.
+
+ejemplo: datos \<- read.table(“archivo.txt”, sep = “:”)
+
+8.  Si en un dataframe, a una variable de tipo `factor` le agrego un
     nuevo elemento que *no se encuentra en los niveles existentes*,
     ¿cuál sería el resultado esperado y por qué?
 
-    - El nuevo elemento
+- El nuevo elemento será tratado como un valor NA (missing value) porque
+  no está presente en los niveles existentes del factor.
 
-6.  Si quiero obtener como resultado las filas de la tabla A que no se
+Ejemplo:
+
+factor_var \<- factor(c(“rojo”, “azul”, “verde”)) factor_var\[4\] \<-
+“amarillo” \# “amarillo” no está en los niveles del factor
+print(factor_var) \# Devolverá NA en la posición 4
+
+- Esto sucede porque los factores en R solo pueden contener los niveles
+  definidos previamente, y si se intenta agregar un nivel que no existe,
+  se almacena como NA.
+
+10. Si quiero obtener como resultado las filas de la tabla A que no se
     encuentran en la tabla B, ¿cómo debería de completar la siguiente
     sentencia de SQL?
 
-    - SELECT \* FROM A \_\_\_\_\_\_\_ B ON A.KEY = B.KEY WHERE
-      \_\_\_\_\_\_\_\_\_\_ = \_\_\_\_\_\_\_\_\_\_
+- SELECT \* FROM A LEFT JOIN B ON A.KEY = B.KEY WHERE B.KEY IS NULL;
 
 Extra: ¿Cuántos posibles exámenes de 5 preguntas se pueden realizar
 utilizando como banco las diez acá presentadas? (responder con código de
 R.)
+
+- posibles_examenes \<- choose(10, 5)
 
 ## Sección II Preguntas prácticas. (30pts)
 
@@ -169,11 +207,47 @@ territorios cuyas pérdidas sean “considerables”. Bajo su criterio,
 ## A
 
 ``` r
-###resuelva acá
+parcial_anonimo <- readRDS("C:/Users/miche/OneDrive/Escritorio/DATA_WRANGLING/DataWragling/parcial_resultados/parcial_anonimo.rds")
+
+# Ver las primeras filas del dataframe
+head(parcial_anonimo)
 ```
+
+    ##         DATE Codigo Material Descripcion     Pais Distribuidor Territorio
+    ## 1 2018-12-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
+    ## 2 2018-11-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
+    ## 3 2018-10-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
+    ## 4 2018-09-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
+    ## 5 2018-08-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
+    ## 6 2018-07-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
+    ##    Cliente    Marca Canal Venta Unidades plaza  Venta
+    ## 1 9d6e1d65 61d7fbfc    7b48292e              2  26.50
+    ## 2 9d6e1d65 61d7fbfc    7b48292e              0   0.00
+    ## 3 9d6e1d65 61d7fbfc    7b48292e              3  39.75
+    ## 4 9d6e1d65 61d7fbfc    7b48292e              3  39.75
+    ## 5 9d6e1d65 61d7fbfc    7b48292e              8 106.00
+    ## 6 9d6e1d65 61d7fbfc    7b48292e              3  39.75
 
 ## B
 
 ``` r
-###resuelva acá
+parcial_anonimo <- readRDS("C:/Users/miche/OneDrive/Escritorio/DATA_WRANGLING/DataWragling/parcial_resultados/parcial_anonimo.rds")
+
+# Ver las primeras filas del dataframe
+head(parcial_anonimo)
 ```
+
+    ##         DATE Codigo Material Descripcion     Pais Distribuidor Territorio
+    ## 1 2018-12-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
+    ## 2 2018-11-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
+    ## 3 2018-10-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
+    ## 4 2018-09-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
+    ## 5 2018-08-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
+    ## 6 2018-07-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
+    ##    Cliente    Marca Canal Venta Unidades plaza  Venta
+    ## 1 9d6e1d65 61d7fbfc    7b48292e              2  26.50
+    ## 2 9d6e1d65 61d7fbfc    7b48292e              0   0.00
+    ## 3 9d6e1d65 61d7fbfc    7b48292e              3  39.75
+    ## 4 9d6e1d65 61d7fbfc    7b48292e              3  39.75
+    ## 5 9d6e1d65 61d7fbfc    7b48292e              8 106.00
+    ## 6 9d6e1d65 61d7fbfc    7b48292e              3  39.75
