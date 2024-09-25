@@ -153,10 +153,26 @@ B. Estrategia de negocio ha decidido que ya no operará en aquellos territorios 
 parcial_anonimo <- readRDS("C:/Users/miche/OneDrive/Escritorio/DATA_WRANGLING/DataWragling/parcial_resultados/parcial_anonimo.rds")
 
 # Ver las primeras filas del dataframe
-head(parcial_anonimo)
+#head(parcial_anonimo)
+#names(parcial_anonimo)
+
+library(dplyr)
+
+clientes_multipais <- parcial_anonimo %>%
+  group_by(Cliente, Pais) %>%
+  summarise(Venta_total = sum(as.numeric(Venta))) %>%
+  ungroup() %>%
+  group_by(Cliente) %>%
+  filter(n_distinct(Pais) > 1) %>%
+  summarise(Venta_total = sum(Venta_total)) %>%
+  arrange(desc(Venta_total))
+
+top_5_clientes <- head(clientes_multipais, 5)
+
+top_5_clientes
 
 ```
-
+Para poder saber cuáles de los clientes que están en más de un país es rentable primero se basa en la columna de CLIENTES y se hace una filtración de los que están más de un país. Luego basándose en estos clientes se hace una suma de todo lo que está en VENTAS según ese ID de cliente, es importante mencionar que la rentabilidad se basa en el numero más grande que esté en VENTAS ya que aquí también se tienen números negativos que pueden ser contados como pérdidas. En conclusión se realizó una tabla top_5_clientes que toma en cuenta la suma total de positivos y negativos de VENTAS para saber quiénes tienen un número mayor. Esto es visto como los 5 clientes más rentables
 
 
 
@@ -165,9 +181,8 @@ head(parcial_anonimo)
 ```{r }
 parcial_anonimo <- readRDS("C:/Users/miche/OneDrive/Escritorio/DATA_WRANGLING/DataWragling/parcial_resultados/parcial_anonimo.rds")
 
-# Ver las primeras filas del dataframe
 head(parcial_anonimo)
-
+names(parcial_anonimo)
 
 ```
 

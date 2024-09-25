@@ -210,30 +210,68 @@ territorios cuyas pérdidas sean “considerables”. Bajo su criterio,
 parcial_anonimo <- readRDS("C:/Users/miche/OneDrive/Escritorio/DATA_WRANGLING/DataWragling/parcial_resultados/parcial_anonimo.rds")
 
 # Ver las primeras filas del dataframe
-head(parcial_anonimo)
+#head(parcial_anonimo)
+#names(parcial_anonimo)
+
+library(dplyr)
 ```
 
-    ##         DATE Codigo Material Descripcion     Pais Distribuidor Territorio
-    ## 1 2018-12-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
-    ## 2 2018-11-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
-    ## 3 2018-10-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
-    ## 4 2018-09-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
-    ## 5 2018-08-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
-    ## 6 2018-07-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
-    ##    Cliente    Marca Canal Venta Unidades plaza  Venta
-    ## 1 9d6e1d65 61d7fbfc    7b48292e              2  26.50
-    ## 2 9d6e1d65 61d7fbfc    7b48292e              0   0.00
-    ## 3 9d6e1d65 61d7fbfc    7b48292e              3  39.75
-    ## 4 9d6e1d65 61d7fbfc    7b48292e              3  39.75
-    ## 5 9d6e1d65 61d7fbfc    7b48292e              8 106.00
-    ## 6 9d6e1d65 61d7fbfc    7b48292e              3  39.75
+    ## 
+    ## Adjuntando el paquete: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+``` r
+clientes_multipais <- parcial_anonimo %>%
+  group_by(Cliente, Pais) %>%
+  summarise(Venta_total = sum(as.numeric(Venta))) %>%
+  ungroup() %>%
+  group_by(Cliente) %>%
+  filter(n_distinct(Pais) > 1) %>%
+  summarise(Venta_total = sum(Venta_total)) %>%
+  arrange(desc(Venta_total))
+```
+
+    ## `summarise()` has grouped output by 'Cliente'. You can override using the
+    ## `.groups` argument.
+
+``` r
+top_5_clientes <- head(clientes_multipais, 5)
+
+top_5_clientes
+```
+
+    ## # A tibble: 5 × 2
+    ##   Cliente  Venta_total
+    ##   <chr>          <dbl>
+    ## 1 a17a7558      19818.
+    ## 2 ff122c3f      15359.
+    ## 3 c53868a0      13813.
+    ## 4 044118d4       9436.
+    ## 5 f676043b       3635.
+
+Para poder saber cuáles de los clientes que están en más de un país es
+rentable primero se basa en la columna de CLIENTES y se hace una
+filtración de los que están más de un país. Luego basándose en estos
+clientes se hace una suma de todo lo que está en VENTAS según ese ID de
+cliente, es importante mencionar que la rentabilidad se basa en el
+numero más grande que esté en VENTAS ya que aquí también se tienen
+números negativos que pueden ser contados como pérdidas. En conclusión
+se realizó una tabla top_5_clientes que toma en cuenta la suma total de
+positivos y negativos de VENTAS para saber quiénes tienen un número
+mayor. Esto es visto como los 5 clientes más rentables
 
 ## B
 
 ``` r
 parcial_anonimo <- readRDS("C:/Users/miche/OneDrive/Escritorio/DATA_WRANGLING/DataWragling/parcial_resultados/parcial_anonimo.rds")
 
-# Ver las primeras filas del dataframe
 head(parcial_anonimo)
 ```
 
@@ -251,3 +289,11 @@ head(parcial_anonimo)
     ## 4 9d6e1d65 61d7fbfc    7b48292e              3  39.75
     ## 5 9d6e1d65 61d7fbfc    7b48292e              8 106.00
     ## 6 9d6e1d65 61d7fbfc    7b48292e              3  39.75
+
+``` r
+names(parcial_anonimo)
+```
+
+    ##  [1] "DATE"            "Codigo Material" "Descripcion"     "Pais"           
+    ##  [5] "Distribuidor"    "Territorio"      "Cliente"         "Marca"          
+    ##  [9] "Canal Venta"     "Unidades plaza"  "Venta"
