@@ -265,35 +265,43 @@ numero más grande que esté en VENTAS ya que aquí también se tienen
 números negativos que pueden ser contados como pérdidas. En conclusión
 se realizó una tabla top_5_clientes que toma en cuenta la suma total de
 positivos y negativos de VENTAS para saber quiénes tienen un número
-mayor. Esto es visto como los 5 clientes más rentables
+mayor. Esto es visto como los 5 clientes más rentables.
+
+Ojo: para esta respuesta se toma en cuenta que VENTAS ya es el total de
+lo ganado/perdido, no se toma en cuenta la columna UNIDADES_PLAZA
 
 ## B
 
 ``` r
 parcial_anonimo <- readRDS("C:/Users/miche/OneDrive/Escritorio/DATA_WRANGLING/DataWragling/parcial_resultados/parcial_anonimo.rds")
 
-head(parcial_anonimo)
+#head(parcial_anonimo)
+#names(parcial_anonimo)
+
+library(dplyr)
+
+territorios_perdidas <- parcial_anonimo %>%
+  group_by(Territorio) %>%
+  summarise(Venta_neta = sum(as.numeric(Venta))) %>%
+  arrange(Venta_neta)
+
+top_5_territorios_perdidas <- head(territorios_perdidas, 5)
+
+top_5_territorios_perdidas
 ```
 
-    ##         DATE Codigo Material Descripcion     Pais Distribuidor Territorio
-    ## 1 2018-12-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
-    ## 2 2018-11-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
-    ## 3 2018-10-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
-    ## 4 2018-09-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
-    ## 5 2018-08-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
-    ## 6 2018-07-01        637caff5    0cf3ec3d 4046ee34     9a47575c   69c1b705
-    ##    Cliente    Marca Canal Venta Unidades plaza  Venta
-    ## 1 9d6e1d65 61d7fbfc    7b48292e              2  26.50
-    ## 2 9d6e1d65 61d7fbfc    7b48292e              0   0.00
-    ## 3 9d6e1d65 61d7fbfc    7b48292e              3  39.75
-    ## 4 9d6e1d65 61d7fbfc    7b48292e              3  39.75
-    ## 5 9d6e1d65 61d7fbfc    7b48292e              8 106.00
-    ## 6 9d6e1d65 61d7fbfc    7b48292e              3  39.75
+    ## # A tibble: 5 × 2
+    ##   Territorio Venta_neta
+    ##   <chr>           <dbl>
+    ## 1 e6fd9da9         18.2
+    ## 2 13b223c9         49.9
+    ## 3 368301e2        121. 
+    ## 4 79428560        132  
+    ## 5 e034e3c8        247.
 
-``` r
-names(parcial_anonimo)
-```
-
-    ##  [1] "DATE"            "Codigo Material" "Descripcion"     "Pais"           
-    ##  [5] "Distribuidor"    "Territorio"      "Cliente"         "Marca"          
-    ##  [9] "Canal Venta"     "Unidades plaza"  "Venta"
+Se utilizo la misma lógica de cómo filtrar por terriorios hacer una suma
+de las ventas totales y se hizo una tabla de top_5_territorios_perdidas
+teniendo como resultado un top 5 terriorios con menor ganancia, si
+elegimos que menos de 100 de ganancias ya no deberíamos operar ahí
+serían territorios  
+e6fd9da9 y 13b223c9

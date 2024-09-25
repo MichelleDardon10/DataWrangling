@@ -172,7 +172,9 @@ top_5_clientes <- head(clientes_multipais, 5)
 top_5_clientes
 
 ```
-Para poder saber cuáles de los clientes que están en más de un país es rentable primero se basa en la columna de CLIENTES y se hace una filtración de los que están más de un país. Luego basándose en estos clientes se hace una suma de todo lo que está en VENTAS según ese ID de cliente, es importante mencionar que la rentabilidad se basa en el numero más grande que esté en VENTAS ya que aquí también se tienen números negativos que pueden ser contados como pérdidas. En conclusión se realizó una tabla top_5_clientes que toma en cuenta la suma total de positivos y negativos de VENTAS para saber quiénes tienen un número mayor. Esto es visto como los 5 clientes más rentables
+Para poder saber cuáles de los clientes que están en más de un país es rentable primero se basa en la columna de CLIENTES y se hace una filtración de los que están más de un país. Luego basándose en estos clientes se hace una suma de todo lo que está en VENTAS según ese ID de cliente, es importante mencionar que la rentabilidad se basa en el numero más grande que esté en VENTAS ya que aquí también se tienen números negativos que pueden ser contados como pérdidas. En conclusión se realizó una tabla top_5_clientes que toma en cuenta la suma total de positivos y negativos de VENTAS para saber quiénes tienen un número mayor. Esto es visto como los 5 clientes más rentables.
+
+Ojo: para esta respuesta se toma en cuenta que VENTAS ya es el total de lo ganado/perdido, no se toma en cuenta la columna UNIDADES_PLAZA
 
 
 
@@ -181,8 +183,23 @@ Para poder saber cuáles de los clientes que están en más de un país es renta
 ```{r }
 parcial_anonimo <- readRDS("C:/Users/miche/OneDrive/Escritorio/DATA_WRANGLING/DataWragling/parcial_resultados/parcial_anonimo.rds")
 
-head(parcial_anonimo)
-names(parcial_anonimo)
+#head(parcial_anonimo)
+#names(parcial_anonimo)
+
+library(dplyr)
+
+territorios_perdidas <- parcial_anonimo %>%
+  group_by(Territorio) %>%
+  summarise(Venta_neta = sum(as.numeric(Venta))) %>%
+  arrange(Venta_neta)
+
+top_5_territorios_perdidas <- head(territorios_perdidas, 5)
+
+top_5_territorios_perdidas
+
+
 
 ```
-
+Se utilizo la misma lógica de cómo filtrar por terriorios hacer una suma de las ventas totales y se hizo una tabla de top_5_territorios_perdidas
+teniendo como resultado un top 5 terriorios con menor ganancia, si elegimos que menos de 100 de ganancias ya no deberíamos operar ahí serían territorios 	
+e6fd9da9 y 13b223c9
