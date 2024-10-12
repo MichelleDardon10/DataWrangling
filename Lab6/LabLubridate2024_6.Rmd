@@ -16,6 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(nycflights13)
 library(lubridate)
 library(dplyr)
+
 ```
 
 ## Resuelva las siguientes preguntas: 
