@@ -1,0 +1,53 @@
+---
+title: "Lubridate Lab"
+author: "Michelle"
+date: "10/6/2024"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Laboratorio de la libreria Lubridate
+
+```{r, cache=TRUE, echo=TRUE, message=FALSE}
+##cargar librerias
+library(nycflights13)
+library(lubridate)
+library(dplyr)
+```
+
+## Resuelva las siguientes preguntas: 
+
+### Ejercicio 1: Convertir columnas de hora en fecha-hora
+
+Problema: Convierte las columnas dep_time (hora de salida) y arr_time (hora de llegada) en objetos de tipo datetime usando make_datetime() de lubridate. Recuerda que estas columnas están en formato militar (HHMM).
+
+Ayuda: Investiga la funcion matematica de modulo de r.
+
+
+
+## Ejercicio 2: Duracion del vuelo
+
+Calcula el tiempo de vuelo total en minutos entre las columnas dep_time y arr_time que calculaste en el primer Ejercicio.
+
+
+## Ejercicio 3: Extraer componentes de fechas
+
+Extrae el dia de la semana y la hora en que salieron los aviones y guardalos en las variables `dep_day_of_week` y `dep_hour`.
+
+
+
+## Ejercicio 4: Crear nuevas columnas con el día de la semana y la semana del año
+
+Problema: Usando la columna `time_hour`, crea una nueva columna que indique el día de la semana y otra que indique la semana del año en la que ocurrió el vuelo.
+
+Ayuda: Invesitga la funcion wday de lubridate.
+
+## Ejercicio 5: Encontrar los vuelos que salieron los fines de semana
+
+Problema: Filtra los vuelos que despegaron un sábado o domingo y devuelve el total de vuelos en fines de semana.
+
+
+
