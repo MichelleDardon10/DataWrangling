@@ -1,0 +1,202 @@
+---
+title: "Lab-9"
+author: "Michelle"
+date: "2024-11-17"
+output: 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(mice)
+  library(Hmisc)
+  library(VIM)
+  library(caret)
+})
+```
+
+# Parte 1: Análisis de Missing Values
+
+### 1. Missing data
+
+```{r}
+
+titanic_md <- read_csv("Lab9/titanic_MD.csv")
+titanic <- read.csv("Lab9/titanic.csv")
+
+# NA por columna
+na_suma <- data.frame(
+  n_suma = colSums(is.na(titanic_md)),
+  pct_suma = colSums(is.na(titanic_md))/nrow(titanic_md)*100
+)
+
+md.pattern(titanic_md)
+```
+
+## 2. Imputación de datos
+
+### EDAD
+- **Por Regresión Lineal**: 
+- La regresión lineal modela la relación entre una variable dependiente (en este caso, la variable con valores faltantes) y una o más variables independientes (predictoras)
+
+
+### Cabin
+- **Por moda**: 
+- La ubicación de los camarotes está relacionada con la clase del pasajero.
+
+### Embarked
+- **Por moda**
+- Puerto más común de embarque, ya que tiene pocos missing values.
+
+## 3. Filas completas (reporte)
+
+```{r}
+# Identificar filas completas
+filas <- complete.cases(titanic_md)
+cat("Número de filas completas:", sum(filas), "\n")
+cat("Porcentaje de filas completas:", mean(filas)*100, "%\n")
+```
+
+## 4. Métodos de imputación
+
+### Imputación general
+
+```{r}
+
+general_imputation <- function(data) {
+  data_imp <- data
+  
+  # Edad
+  data_imp$Age[is.na(data_imp$Age)] <- mean(data_imp$Age, na.rm = TRUE)
+  
+  # Cabina 
+  most_frequent_cabin <- names(sort(table(data_imp$Cabin), decreasing = TRUE))[1]
+  data_imp$Cabin[is.na(data_imp$Cabin)] <- most_frequent_cabin
+  
+  # Embarcación 
+  most_frequent_embarked <- names(sort(table(data_imp$Embarked), decreasing = TRUE))[1]
+  data_imp$Embarked[is.na(data_imp$Embarked)] <- most_frequent_embarked
+  
+  return(data_imp)
+}
+
+titanic_imp_general <- general_imputation(titanic_md)
+```
+
+###  Regresión lineal
+
+```{r}
+
+age_model <- lm(Age ~ Pclass + Sex + SibSp + Parch + Fare, 
+                data = titanic_md[!is.na(titanic_md$Age),])
+
+titanic_imp_regression <- titanic_md
+
+missing_age <- is.na(titanic_imp_regression$Age)
+
+titanic_imp_regression$Age[missing_age] <- predict(age_model, 
+                                                  newdata = titanic_imp_regression[missing_age,])
+```
+
+### Outliers
+
+```{r}
+
+detect_outliers_sd <- function(x, n_sd = 3) {
+  mean_x <- mean(x, na.rm = TRUE)
+  sd_x <- sd(x, na.rm = TRUE)
+  
+  outliers <- x < (mean_x - n_sd * sd_x) | x > (mean_x + n_sd * sd_x)
+  return(outliers)
+}
+
+
+age_outliers <- detect_outliers_sd(titanic_md$Age[!is.na(titanic_md$Age)])
+```
+
+## 5. Comparación contra datos originales
+
+```{r}
+
+age_comparison <- data.frame(
+  Original = mean(titanic$Age),
+  General_Imputation = mean(titanic_imp_general$Age),
+  Regression_Imputation = mean(titanic_imp_regression$Age)
+)
+
+print(age_comparison)
+```
+
+## 6. Conclusiones 
+
+1. La imputación mediante regresión lineal es efectiva para la variable Edad, ya que preserva las correlaciones y patrones entre las diferentes variables del conjunto de datos.
+2. Para las variables categóricas como cabina y embarcación, la imputación basada en la moda es adecuada, dado que refleja las características más comunes observadas en los datos originales.
+3.El uso de métodos específicos según el tipo de variable (regresión para continuas y moda para categóricas) asegura imputaciones más representativas y fieles al comportamiento general de los datos.
+
+# Parte 2
+
+### 1. Normalización de columnas
+
+```{r}
+# Columnas numéricas
+numeric_cols <- c("Age", "Fare")
+
+# estandarizacion
+standardize <- function(x) {
+  return((x - mean(x)) / sd(x))
+}
+
+# MinMaxScaling
+minmax_scaling <- function(x) {
+  return((x - min(x)) / (max(x) - min(x)))
+}
+
+# MaxAbsScaler
+maxabs_scaling <- function(x) {
+  return(x / max(abs(x)))
+}
+
+
+titanic_standardized <- titanic_imp_regression
+titanic_minmax <- titanic_imp_regression
+titanic_maxabs <- titanic_imp_regression
+
+for(col in numeric_cols) {
+  titanic_standardized[[col]] <- standardize(titanic_imp_regression[[col]])
+  titanic_minmax[[col]] <- minmax_scaling(titanic_imp_regression[[col]])
+  titanic_maxabs[[col]] <- maxabs_scaling(titanic_imp_regression[[col]])
+}
+```
+
+## 2. Comparaciones
+
+```{r}
+
+get_statistics <- function(data, col) {
+  return(c(
+    mean = mean(data[[col]]),
+    sd = sd(data[[col]]),
+    min = min(data[[col]]),
+    max = max(data[[col]]),
+    median = median(data[[col]])
+  ))
+}
+
+
+age_stats <- data.frame(
+  Original = get_statistics(titanic, "Age"),
+  Standardized = get_statistics(titanic_standardized, "Age"),
+  MinMax = get_statistics(titanic_minmax, "Age"),
+  MaxAbs = get_statistics(titanic_maxabs, "Age")
+)
+
+print(age_stats)
+```
+
+### Conclusiones 
+
+La elección del método de normalización depende de las características de los datos y los objetivos del análisis. La estandarización ajusta los datos a una media de 0 y una desviación estándar de 1, siendo útil para algoritmos que asumen distribuciones normales. El MinMaxScaling reescala los valores entre 0 y 1, ideal para situaciones donde se necesita limitar los datos, como en redes neuronales. Por su parte, el MaxAbsScaler divide los valores por el máximo absoluto, manteniendo el cero y siendo adecuado para datos dispersos o con valores extremos. Cada método tiene sus ventajas y debe elegirse según el contexto.
